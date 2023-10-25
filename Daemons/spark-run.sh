@@ -1,3 +1,4 @@
+#!/bin/bash
 ./sbin/start-master.sh
 ./sbin/start-worker.sh spark://pop-os.localdomain:7077
 
