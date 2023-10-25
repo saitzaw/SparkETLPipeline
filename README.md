@@ -1,10 +1,15 @@
+# Default Python version 
+- 3.9.15
+
 # Install Apache Airflow 
+- Choose Apache Airflow version is 2.6.2
 - Install apache airflow in VM using the python virtual envrionment
 - Create a daemon to run Airflow webserver 
 - Create a daemon to run Airflow scheduler
-- Change the configuration in the airflow.cfg 
+- Change the configuration in the airflow.cfg [dag location]
 
-# Install Apache Spark
+# Install Apache Spark[Computing Engine for ETL process]
+- Choose Apache Spark version is 3.5.0
 - Install Aapche Spark in VM which has the Airflow Server
 - Extract tarball file in /opt/ and change the name to /opt/spark/
 - Config the Spark environment 
