@@ -1,0 +1,19 @@
+[Unit]
+Description=Airflow webserver daemon
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+User=sthz
+Group=sthz
+Type=simple
+ExecStart=/bin/bash /home/sthz/airflow-webserver.sh
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+Restart=on-failure
+RestartSec=3
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+
