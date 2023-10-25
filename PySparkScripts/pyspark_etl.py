@@ -3,14 +3,23 @@ import configparser
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import (
     when,
+    length,
     col,
     unix_timestamp,
     date_format,
     sum,
     collect_list,
     explode,
+    substring,
 )
-from pyspark.sql.types import StructType, StructField, StringType, IntegerType
+from pyspark.sql.types import (
+    StructType, 
+    StructField, 
+    StringType, 
+    IntegerType, 
+    DateType, 
+    DecimalType,
+    )
 
 
 # Access the configuration file using SparkFiles
@@ -153,6 +162,35 @@ def vehicle_daily_utilization(df):
     )
     return unique_created_dates
 
+def data_type_casting(df):
+    df = df.withColumn("created_date", col("created_date").cast(DateType()))
+    df = df.withColumn("vehicle_id", col("vehicle_id").cast(IntegerType()))
+
+    # Columns to cast to DecimalType(10, 4)
+    columns_to_cast = [
+        "idle_in_yard", "on_rent", "replacement", "drive_car",
+        "cleaning_process", "relocation", "transit", "panel_shop",
+        "maintenance", "pending", "overdue"
+    ]
+
+    # Cast the specified columns to DecimalType(10,4)
+    for column in columns_to_cast:
+        df = df.withColumn(column, col(column).cast(DecimalType(10, 4)))
+
+    # Define the maximum length
+    max_length = 15
+    
+    # Columns to apply the constraint
+    columns_to_constrain = ["utilization", "drive_car_utilization", "ops_utilization", "lost_utilization"]
+    for column in columns_to_constrain:
+        df = df.withColumn(column, when(length(col(column)) > max_length, substring(col(column), 1, max_length)).otherwise(col(column)))
+
+    # Cast to StringType
+    for column in columns_to_constrain:
+        df = df.withColumn(column, col(column).cast(StringType()))
+
+    return df
+
 
 def load_data_to_parquet(df):
     try:
@@ -290,6 +328,9 @@ def main():
         Join_vehicles_data["location_id"] == df_locations["location_id"],
         "inner",
     )
+
+    logging.info("End Join Join_vehicles_data and vehicle location")
+    logging.info("Start Type Casting.")
     final_report = final_result.select(
         "created_date",
         "vehicle_id",
@@ -313,11 +354,9 @@ def main():
         "ops_utilization",
         "lost_utilization",
     )
-    final_report = final_report.withColumnRenamed(
-        "earliest_created_at", "created_at"
-    )
 
-    logging.info("End Join Join_vehicles_data and vehicle location")
+    final_report = data_type_casting(final_report)
+    logging.info("End Type Casting.")
     logging.info("--End Transformation Data.")
     logging.info("----------------------------")
     logging.info("--Start Loading Data.")
