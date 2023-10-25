@@ -13,13 +13,11 @@ from pyspark.sql.functions import (
     substring,
 )
 from pyspark.sql.types import (
-    StructType, 
-    StructField, 
-    StringType, 
-    IntegerType, 
-    DateType, 
+    StringType,
+    IntegerType,
+    DateType,
     DecimalType,
-    )
+)
 
 
 # Access the configuration file using SparkFiles
@@ -162,15 +160,24 @@ def vehicle_daily_utilization(df):
     )
     return unique_created_dates
 
+
 def data_type_casting(df):
     df = df.withColumn("created_date", col("created_date").cast(DateType()))
     df = df.withColumn("vehicle_id", col("vehicle_id").cast(IntegerType()))
 
     # Columns to cast to DecimalType(10, 4)
     columns_to_cast = [
-        "idle_in_yard", "on_rent", "replacement", "drive_car",
-        "cleaning_process", "relocation", "transit", "panel_shop",
-        "maintenance", "pending", "overdue"
+        "idle_in_yard",
+        "on_rent",
+        "replacement",
+        "drive_car",
+        "cleaning_process",
+        "relocation",
+        "transit",
+        "panel_shop",
+        "maintenance",
+        "pending",
+        "overdue",
     ]
 
     # Cast the specified columns to DecimalType(10,4)
@@ -179,11 +186,22 @@ def data_type_casting(df):
 
     # Define the maximum length
     max_length = 15
-    
+
     # Columns to apply the constraint
-    columns_to_constrain = ["utilization", "drive_car_utilization", "ops_utilization", "lost_utilization"]
+    columns_to_constrain = [
+        "utilization",
+        "drive_car_utilization",
+        "ops_utilization",
+        "lost_utilization",
+    ]
     for column in columns_to_constrain:
-        df = df.withColumn(column, when(length(col(column)) > max_length, substring(col(column), 1, max_length)).otherwise(col(column)))
+        df = df.withColumn(
+            column,
+            when(
+                length(col(column)) > max_length,
+                substring(col(column), 1, max_length),
+            ).otherwise(col(column)),
+        )
 
     # Cast to StringType
     for column in columns_to_constrain:
