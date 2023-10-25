@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "ETLpipeline"
+version = "1.0"
+description = "ETL pipeline using Spark"
+authors = ["SThZ"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pyspark = "^3.5.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
