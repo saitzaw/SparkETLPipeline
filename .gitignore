@@ -1,0 +1,9 @@
+data/
+.env 
+.qa-env/
+.prod-env/
+.venv/
+..ipynb_checkpoints/
+*.log/
+
+
