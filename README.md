@@ -30,7 +30,7 @@
 
 ## Run Spark server
 - cd /opt/spark
-- Run run.sh 
+- Run spark-run.sh 
 - Change the default port to 7777
 - Check in web browser localhost:7777
  
