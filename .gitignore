@@ -3,9 +3,9 @@ data/
 .qa-env/
 .prod-env/
 .venv/
-..ipynb_checkpoints/
 *.log/
 *.conf
 
 models/
 __pycache__/
+.ipynb_checkpoints/
