@@ -6,10 +6,15 @@ authors = ["SThZ"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9.15,<3.13"
 pyspark = "^3.5.0"
 black = "^23.10.1"
 jupyterlab = "^4.0.7"
+pandas = "^2.1.2"
+psycopg2-binary = "^2.9.9"
+pymysql = "^1.1.0"
+python-dotenv = "^1.0.0"
+SQLAlchemy = "^2.0.23"
 
 [tool.poetry.dev-dependencies]
 
